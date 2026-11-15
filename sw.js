@@ -1,26 +1,42 @@
 const CACHE = 'beelzework-v1';
-const FILES = ['./', './index.html', './manifest.json',
-               './icon-192.png', './icon-512.png', './icon-maskable-512.png'];
+const SHELL = [
+  './',
+  './index.html',
+  './manifest.json',
+  'https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png'
+];
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
-});
-
-self.addEventListener('activate', e => {
+self.addEventListener('install', function (e) {
   e.waitUntil(
-    caches.keys()
-      .then(k => Promise.all(k.filter(x => x !== CACHE).map(x => caches.delete(x))))
-      .then(() => self.clients.claim())
+    caches.open(CACHE).then(function (c) {
+      return Promise.all(SHELL.map(function (url) {
+        return c.add(url).catch(function () {});
+      }));
+    }).then(function () { return self.skipWaiting(); })
   );
 });
 
-self.addEventListener('fetch', e => {
+self.addEventListener('activate', function (e) {
+  e.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(keys.filter(function (k) { return k !== CACHE; })
+        .map(function (k) { return caches.delete(k); }));
+    }).then(function () { return self.clients.claim(); })
+  );
+});
+
+self.addEventListener('fetch', function (e) {
   if (e.request.method !== 'GET') return;
   e.respondWith(
-    caches.match(e.request).then(hit => hit || fetch(e.request).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(e.request, copy));
-      return res;
-    }).catch(() => caches.match('./index.html')))
+    caches.match(e.request).then(function (cached) {
+      var fresh = fetch(e.request).then(function (res) {
+        var copy = res.clone();
+        caches.open(CACHE).then(function (c) { c.put(e.request, copy); }).catch(function () {});
+        return res;
+      }).catch(function () {
+        return cached || caches.match('./index.html');
+      });
+      return cached || fresh;
+    })
   );
 });
