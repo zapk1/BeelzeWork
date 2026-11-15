@@ -6,8 +6,14 @@
 <title>BeelzeWork — Daily Activities</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0a0a0a">
+<meta name="description" content="Plan your day, tick off work and keep notes — works fully offline.">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BeelzeWork">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" type="image/png" href="https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png">
+<link rel="apple-touch-icon" href="https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png">
+
 
 <style>
   :root{
@@ -38,7 +44,7 @@
   .hrow{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
   .hbrand{display:flex;align-items:center;gap:9px;flex:1;min-width:150px}
   .hbrand h1{font-size:16px;letter-spacing:-.3px} .hbrand span{font-size:10px;color:var(--grey);font-weight:700;letter-spacing:.4px;display:block}
-  .logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(180deg,#fff,#f1f3f6);border:1px solid var(--line);
+  .logo{width:46px;height:46px;border-radius:13px;background:linear-gradient(180deg,#fff,#f1f3f6);border:1px solid var(--line);overflow:hidden;
     display:flex;align-items:center;justify-content:center;color:var(--blue);box-shadow:var(--shadow),var(--shadow-in)}
   .clock{border:1px solid var(--line);border-radius:11px;padding:7px 11px;font-size:12px;font-weight:800;display:flex;align-items:center;gap:6px;
     white-space:nowrap;background:linear-gradient(180deg,#fff,#fafafb);color:var(--blue);box-shadow:var(--shadow-sm),var(--shadow-in)}
@@ -139,7 +145,7 @@ function fresh(){return {day:today(),activities:[],history:[]};}
 function loadData(){try{var raw=JSON.parse(localStorage.getItem(KEY)||'null');if(!raw)return fresh();if(!raw.activities)raw.activities=[];if(!raw.history)raw.history=[];if(!raw.day)raw.day=today();return raw;}catch(e){return fresh();}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(db));}catch(e){}}
 let toastTimer=null;function toast(msg,tone){var t=document.getElementById('toast');t.textContent=msg;t.className='show'+(tone?' '+tone:'');clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.className='';},2600);}
-function openApp(){document.getElementById('app').classList.remove('hidden');view='app';document.getElementById('appLogo').innerHTML=ic('briefcase',20);document.getElementById('addBtn').innerHTML=ic('plus',16)+' Add activity';document.getElementById('endDayBtn').innerHTML=ic('archive',16)+' End day';document.getElementById('dSendBtn').innerHTML=ic('send',16);renderAll();tick();checkDay(true);}
+function openApp(){document.getElementById('app').classList.remove('hidden');view='app';document.getElementById('appLogo').innerHTML='<img src="https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png" alt="BeelzeWork" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';document.getElementById('addBtn').innerHTML=ic('plus',16)+' Add activity';document.getElementById('endDayBtn').innerHTML=ic('archive',16)+' End day';document.getElementById('dSendBtn').innerHTML=ic('send',16);renderAll();tick();checkDay(true);}
 function archiveDay(){if(!db.activities.length)return false;db.history.push({date:db.day,items:JSON.parse(JSON.stringify(db.activities)),total:db.activities.length,done:db.activities.filter(function(a){return a.done;}).length});db.activities=[];return true;}
 function checkDay(silent){if(db.day===today())return;var archived=archiveDay();db.day=today();save();if(view==='app')renderAll();if(!silent&&archived)toast('New day — yesterday was saved and cleared','blue');}
 function askEndDay(){if(!db.activities.length){toast('Nothing to close today');return;}var done=db.activities.filter(function(a){return a.done;}).length;confirmAsk('day','Close this day?','You did '+done+' of '+db.activities.length+' activities. The day gets saved to your history and the board clears for a fresh start.','Close day',function(){archiveDay();db.day=today();save();renderAll();toast('Day closed — board cleared for a new start','blue');});}
@@ -167,7 +173,9 @@ boot();
 </script>
 <script>
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  window.addEventListener('load', function(){ navigator.serviceWorker.register('sw.js'); });
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js', { scope: './' }).catch(function(){});
+  });
 }
 </script>
 </body>
