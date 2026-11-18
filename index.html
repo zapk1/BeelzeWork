@@ -50,8 +50,8 @@
   button:hover{border-color:#cbd0d6}
 
   button.primary{
-    background:linear-gradient(180deg,#2f6dff 0%,var(--blue) 100%);
-    color:#fff;border-color:var(--blue);box-shadow:var(--shadow),var(--shadow-in);
+    background:var(--blue);
+    color:#fff;border-color:var(--blue);box-shadow:var(--shadow-sm);
   }
 
   button.danger{
@@ -60,8 +60,8 @@
   }
 
   button.dark{
-    background:linear-gradient(180deg,#1c1c1e 0%,var(--ink) 100%);
-    color:#fff;border-color:var(--ink);box-shadow:var(--shadow),var(--shadow-in);
+    background:var(--ink);
+    color:#fff;border-color:var(--ink);box-shadow:var(--shadow-sm);
   }
 
   button.ghost{background:#fff;border-color:var(--line);color:var(--grey)}
@@ -136,9 +136,51 @@
     position:relative;
     min-width:0;
   }
-  .act.done .act-name{
+    .act.done .act-name{
     text-decoration:line-through;
     color:var(--grey);
+  }
+  .act.done{
+    background:#f4f5f7;
+    border-color:#dfe2e6;
+    opacity:.92;
+  }
+  .act.done .act-name,
+  .act.done .act-summary,
+  .act.done .act-detail,
+  .act.done .act-ic,
+  .act.done .act-ic-label,
+  .act.done .act-onlyfor,
+  .act.done .act-onlyfor b,
+  .act.done .act-weekbadge{
+    color:var(--grey);
+    text-decoration:line-through;
+  }
+  .act.done .act-summary,
+  .act.done .act-ic-label,
+  .act.done .act-onlyfor,
+  .act.done .act-onlyfor b{
+    text-decoration:line-through;
+  }
+  .act.done .act-weekbadge{
+    background:#f1f3f5;
+    border-color:#dfe2e6;
+    text-decoration:line-through;
+  }
+  .act.done .act-action.complete,
+  .act.done .act-action.more,
+  .act.done .act-action.remove{
+    color:var(--grey);
+  }
+    .act.done .dnote{
+    text-decoration:line-through;
+    color:var(--grey);
+    background:#f1f3f5;
+  }
+  .dnote-done{
+    text-decoration:line-through;
+    color:var(--grey);
+    background:#f1f3f5;
   }
   .act-ic{
     width:44px;height:44px;border-radius:13px;flex-shrink:0;
@@ -435,10 +477,40 @@
     box-shadow:0 0 0 2px var(--red-soft),var(--shadow-sm);
   }
 
-  .chip.on.payment{
+    .chip.on.payment{
     border-color:#fde68a;color:#b45309;background:#fffbeb;
     box-shadow:0 0 0 2px #fffbeb,var(--shadow-sm);
   }
+  .placebox{
+    border:1px solid var(--line);border-radius:11px;padding:10px 13px;background:#fff;
+    box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:9px;cursor:pointer;
+  }
+  .placebox .tic{color:var(--blue);flex-shrink:0;display:flex;align-items:center}
+    .placebox .placeval{
+    flex:1;min-width:0;font-size:15px;font-weight:700;color:var(--ink);
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+
+  .placemenu{
+    display:none;flex-direction:column;gap:4px;margin-top:8px;padding:7px;
+    background:#fff;border:1px solid var(--line);border-radius:14px;
+    box-shadow:0 12px 30px rgba(10,10,10,.10);max-height:215px;overflow-y:auto;
+  }
+
+  .placemenu.open{display:flex}
+
+  .placeitem{
+    display:flex;align-items:center;gap:9px;width:100%;padding:10px 11px;
+    border:1px solid transparent;border-radius:10px;background:#fff;
+    font:inherit;font-size:13.5px;font-weight:700;color:var(--ink);text-align:left;box-shadow:none;
+  }
+
+  .placeitem .tic{color:var(--blue);flex-shrink:0;display:flex;align-items:center}
+  .placeitem span:last-child{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .placeitem:hover{background:#f6f8ff;border-color:var(--line)}
+  .placeitem.on{border-color:var(--blue);color:var(--blue);background:var(--blue-soft)}
+
+
 
   .row{display:flex;gap:8px;margin-top:20px}
   .row button{flex:1}
@@ -474,9 +546,19 @@
     letter-spacing:.3px;display:block;margin-bottom:3px;
   }
 
-  .note-row{display:flex;gap:8px}
+    .note-row{display:flex;gap:8px}
   .note-row input{flex:1}
   .note-row button{flex-shrink:0}
+  .note{display:flex;align-items:flex-start;gap:10px}
+  .note .note-body{flex:1;min-width:0}
+  .note-del{
+    flex-shrink:0;width:30px;height:30px;padding:0;
+    border:1px solid var(--line);border-radius:8px;background:#fff;
+    color:#0a0a0a;display:inline-flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow-sm);cursor:pointer;
+  }
+  .note-del:hover{border-color:#cbd0d6;background:#fff}
+  .note-del:active{transform:translateY(1px)}
 
   #toast{
     position:fixed;left:50%;top:16px;transform:translate(-50%,-160%);z-index:90;
@@ -644,7 +726,7 @@
       <textarea id="eNote" placeholder="Steps, address, client, quantity..."></textarea>
     </div>
 
-    <div class="row">
+        <div class="row">
       <button class="ghost" id="dEditBtn" onclick="openEdit()"></button>
       <button class="primary" id="dDoneBtn" onclick="toggleDone(current, true)"></button>
       <button class="danger" onclick="askDeleteFromDetail()">Cancel work</button>
@@ -653,6 +735,18 @@
       <button class="ghost" onclick="cancelEdit()">Cancel</button>
       <button class="primary" onclick="saveEdit()">Save changes</button>
     </div>
+
+    <div class="sect" style="margin-top:18px">Reorder this box</div>
+    <div class="placebox" id="placeBox" onclick="togglePlaceMenu()">
+      <span class="tic" id="placeBoxIc"></span>
+      <span class="placeval" id="placeBoxLabel">Move to the end</span>
+      <span class="tic" id="placeBoxChev"></span>
+    </div>
+    <div class="placemenu" id="placeMenu"></div>
+    <div class="row">
+      <button class="primary" onclick="moveActivity()" style="flex:1">Place</button>
+    </div>
+
 
   </div>
 </div>
@@ -792,6 +886,7 @@ let pickedIcon = 'briefcase';
 let pickedType = 'must';
 let pickedWeekOnly = false;
 let pickedWeekday = '';
+let pickedPlace = 'end';
 let confirmAction = null;
 let view = 'app';
 let toastTimer = null;
@@ -1135,6 +1230,76 @@ function chooseWeekday(k) {
   buildWeekdayPicker();
 }
 
+function buildPlacePicker() {
+  var sel = document.getElementById('aPlace');
+  if (!sel) return;
+  var opts = '<option value="end">At the end</option>';
+  db.activities.forEach(function (a, i) {
+    opts += '<option value="' + i + '">Before: ' + esc(a.name) + '</option>';
+  });
+  sel.innerHTML = opts;
+  sel.value = pickedPlace;
+}
+
+var placeValue = 'end';
+
+var PLACE_PATHS = {
+  end: '<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h6"/>',
+  before: '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',
+  after: '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+  chev: '<path d="m6 9 6 6 6-6"/>'
+};
+
+function placeSvg(kind, size) {
+  var s = size || 17;
+  return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">'
+    + (PLACE_PATHS[kind] || PLACE_PATHS.end) + '</svg>';
+}
+
+function placeOptions() {
+  var a = db.activities.find(function (x) { return x.id === current; });
+  var opts = [{ v: 'end', kind: 'end', label: 'Move to the end' }];
+  db.activities.forEach(function (x) {
+    if (a && x.id === a.id) return;
+    opts.push({ v: 'before:' + x.id, kind: 'before', label: 'Before: ' + x.name });
+    opts.push({ v: 'after:' + x.id, kind: 'after', label: 'After: ' + x.name });
+  });
+  return opts;
+}
+
+function buildPlaceMenu() {
+  var menu = document.getElementById('placeMenu');
+  if (!menu) return;
+
+  var opts = placeOptions();
+  var picked = opts[0];
+  opts.forEach(function (o) { if (o.v === placeValue) picked = o; });
+  placeValue = picked.v;
+
+  document.getElementById('placeBoxIc').innerHTML = placeSvg(picked.kind);
+  document.getElementById('placeBoxLabel').textContent = picked.label;
+  document.getElementById('placeBoxChev').innerHTML = placeSvg('chev', 16);
+
+  menu.innerHTML = opts.map(function (o) {
+    return '<button type="button" class="placeitem' + (o.v === placeValue ? ' on' : '') + '" data-place="' + esc(o.v) + '">'
+      + '<span class="tic">' + placeSvg(o.kind, 16) + '</span>'
+      + '<span>' + esc(o.label) + '</span>'
+      + '</button>';
+  }).join('');
+
+  menu.classList.remove('open');
+}
+
+function togglePlaceMenu() {
+  var menu = document.getElementById('placeMenu');
+  if (menu) menu.classList.toggle('open');
+}
+
+function choosePlace(v) {
+  placeValue = v;
+  buildPlaceMenu();
+}
+
 function openAdd() {
   document.getElementById('aName').value = '';
   document.getElementById('aNote').value = '';
@@ -1150,6 +1315,8 @@ function openAdd() {
   buildTypePicker();
   buildWeekOnlyPicker();
   buildWeekdayPicker();
+  pickedPlace = 'end';
+  buildPlacePicker();
   document.getElementById('weekdayPick').style.display = 'none';
 
   document.getElementById('addModal').classList.add('open');
@@ -1177,7 +1344,7 @@ function saveActivity() {
     return;
   }
 
-  db.activities.push({
+  var newAct = {
     id: 'a' + Date.now() + Math.random().toString(36).slice(2, 6),
     name: name,
     note: note,
@@ -1189,7 +1356,19 @@ function saveActivity() {
     created: new Date().toISOString(),
     doneAt: null,
     notes: []
-  });
+  };
+
+  var place = 'end';
+  if (place === 'end' || place === '') {
+    db.activities.push(newAct);
+  } else {
+    var idx = parseInt(place, 10);
+    if (isNaN(idx) || idx < 0 || idx > db.activities.length) {
+      db.activities.push(newAct);
+    } else {
+      db.activities.splice(idx, 0, newAct);
+    }
+  }
 
   save();
   closeAdd();
@@ -1235,8 +1414,12 @@ function renderDetail() {
   if (!a) return;
 
   document.getElementById('dIcon').innerHTML = ic(a.icon, 18);
+  document.getElementById('dIcon').classList.toggle('act-ic', !!a.done);
   document.getElementById('dTitle').textContent = a.name;
+  document.getElementById('dTitle').style.textDecoration = a.done ? 'line-through' : 'none';
+  document.getElementById('dTitle').style.color = a.done ? 'var(--grey)' : 'var(--ink)';
   document.getElementById('dStatus').textContent = a.done ? 'Completed' : 'Still open';
+
 
   var created = new Date(a.created);
   var when = created.toLocaleString(undefined, { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -1263,21 +1446,62 @@ function renderDetail() {
   kv += '<div>' + ic('message', 12) + ' <b>' + (a.notes || []).length + '</b> notes</div>';
 
   document.getElementById('dKv').innerHTML = kv;
-  document.getElementById('dNote').textContent = a.note || 'No extra information was added for this activity.';
+  var dNoteEl = document.getElementById('dNote');
+  dNoteEl.textContent = a.note || 'No extra information was added for this activity.';
+  dNoteEl.classList.toggle('dnote-done', !!a.done);
+
 
   var list = document.getElementById('dNotes');
 
   if (!(a.notes || []).length) {
     list.innerHTML = '<p class="muted" style="padding:4px 2px">No notes yet — write something about this work below.</p>';
   } else {
-    list.innerHTML = a.notes.map(function (n) {
-      return '<div class="note"><span>' + n.time + '</span><p>' + esc(n.text) + '</p></div>';
+    list.innerHTML = a.notes.map(function (n, idx) {
+      return '<div class="note">'
+        + '<div class="note-body"><span>' + n.time + '</span><p>' + esc(n.text) + '</p></div>'
+        + '<button type="button" class="note-del" data-note-del="' + idx + '" aria-label="Delete note" title="Delete note">'
+        + ic('trash', 16)
+        + '</button>'
+        + '</div>';
     }).join('');
     list.scrollTop = list.scrollHeight;
   }
 
   var b = document.getElementById('dDoneBtn');
   b.innerHTML = a.done ? (ic('reset', 14) + ' Reopen') : (ic('check', 14) + ' Mark done');
+
+  buildPlaceMenu();
+}
+
+function moveActivity() {
+  var a = db.activities.find(function (x) { return x.id === current; });
+  if (!a) return;
+  var from = db.activities.indexOf(a);
+  if (from < 0) return;
+
+  db.activities.splice(from, 1);
+
+  var ref = -1;
+  var dir = '';
+  var cut = placeValue.indexOf(':');
+
+  if (cut > -1) {
+    dir = placeValue.slice(0, cut);
+    var refId = placeValue.slice(cut + 1);
+    db.activities.forEach(function (x, i) { if (x.id === refId) ref = i; });
+  }
+
+  if (ref < 0) {
+    db.activities.push(a);
+  } else {
+    db.activities.splice(dir === 'after' ? ref + 1 : ref, 0, a);
+  }
+
+  save();
+  renderAll();
+  placeValue = 'end';
+  renderDetail();
+  toast('Activity moved', 'blue');
 }
 
 function sendNote() {
@@ -1299,6 +1523,17 @@ function sendNote() {
   input.value = '';
   renderDetail();
   renderAll();
+}
+
+function deleteNote(idx) {
+  var a = db.activities.find(function (x) { return x.id === current; });
+  if (!a || !a.notes) return;
+  if (idx < 0 || idx >= a.notes.length) return;
+  a.notes.splice(idx, 1);
+  save();
+  renderDetail();
+  renderAll();
+  toast('Note deleted', 'red');
 }
 
 var editIcon = 'briefcase';
@@ -1453,6 +1688,13 @@ function boot() {
     if (b) chooseWeekday(b.getAttribute('data-wd'));
   });
 
+  
+
+  document.getElementById('placeMenu').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-place]');
+    if (b) choosePlace(b.getAttribute('data-place'));
+  });
+
   document.getElementById('timeBox').addEventListener('click', function () {
     var t = document.getElementById('aTime');
     try { t.showPicker(); } catch (err) { t.focus(); }
@@ -1466,9 +1708,15 @@ function boot() {
     var b = e.target.closest('[data-eic]');
     if (b) chooseEditIcon(b.getAttribute('data-eic'));
   });
-  document.getElementById('eTypePick').addEventListener('click', function (e) {
+    document.getElementById('eTypePick').addEventListener('click', function (e) {
     var b = e.target.closest('[data-etype]');
     if (b) chooseEditType(b.getAttribute('data-etype'));
+  });
+
+  document.getElementById('dNotes').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-note-del]');
+    if (!b) return;
+    deleteNote(parseInt(b.getAttribute('data-note-del'), 10));
   });
 
   document.addEventListener('keydown', function (e) {
