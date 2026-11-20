@@ -11,8 +11,9 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="BeelzeWork">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="icon" type="image/png" href="https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png">
-<link rel="apple-touch-icon" href="https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png">
+<link rel="icon" type="image/png" href="https://base44.app/api/apps/6a658880fd290e23c45fefa8/files/mp/public/6a658880fd290e23c45fefa8/3f0373934_beelzework-logo-gold.png">
+<link rel="apple-touch-icon" href="https://base44.app/api/apps/6a658880fd290e23c45fefa8/files/mp/public/6a658880fd290e23c45fefa8/3f0373934_beelzework-logo-gold.png">
+
 
 <style>
   :root{
@@ -69,26 +70,30 @@
   button.icon{padding:0;width:36px;height:36px;border-radius:10px}
 
   header{
-    position:sticky;top:0;z-index:30;
-    background:rgba(255,255,255,.85);
+    position:sticky;top:10px;z-index:30;
+    background:rgba(255,255,255,.92);
     backdrop-filter:saturate(180%) blur(14px);
     -webkit-backdrop-filter:saturate(180%) blur(14px);
-    border-bottom:1px solid var(--line);
+    border:1px solid var(--line);
+    border-radius:20px;
+    margin:10px 12px 0;
     padding:12px 16px;
-    box-shadow:0 1px 0 rgba(10,10,10,.02);
+    box-shadow:var(--shadow);
   }
 
-  .hrow{max-width:720px;margin:0 auto;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .hbrand{display:flex;align-items:center;gap:9px;flex:1;min-width:150px}
-  .hbrand h1{font-size:16px;letter-spacing:-.3px}
-  .hbrand span{font-size:10px;color:var(--grey);font-weight:700;letter-spacing:.4px;display:block}
+    .hrow{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+    .hbrand{display:flex;align-items:flex-end;justify-content:center;gap:7px;min-width:0}
+  .hbrand h1{font-size:19px;font-weight:800;letter-spacing:.3px;line-height:1;text-transform:uppercase}
+  .hbrand span{font-size:10px;color:var(--grey);font-weight:700;letter-spacing:.6px;display:block;line-height:1;margin-top:2px;white-space:nowrap}
 
-  .logo{
-    width:46px;height:46px;border-radius:13px;
-    background:linear-gradient(180deg,#fff,#f1f3f6);
-    border:1px solid var(--line);overflow:hidden;
-    display:flex;align-items:center;justify-content:center;color:var(--blue);
-    box-shadow:var(--shadow),var(--shadow-in);
+
+
+    .logo{
+    width:46px;height:46px;
+    background:none;border:0;box-shadow:none;
+    display:flex;align-items:center;justify-content:center;
+    flex-shrink:0;
+    position:relative;top:3px;
   }
 
   .clock{
@@ -563,11 +568,12 @@
   #toast{
     position:fixed;left:50%;top:16px;transform:translate(-50%,-160%);z-index:90;
     background:var(--ink);color:#fff;border-radius:99px;padding:10px 18px;
-    font-size:13px;font-weight:700;transition:transform .3s;
+    font-size:13px;font-weight:700;transition:transform .3s,opacity .2s;
     box-shadow:var(--shadow-lg);
+    visibility:hidden;opacity:0;pointer-events:none;
   }
 
-  #toast.show{transform:translate(-50%,0)}
+  #toast.show{transform:translate(-50%,0);visibility:visible;opacity:1}
   #toast.red{background:var(--red)}
   #toast.blue{background:var(--blue)}
 
@@ -583,14 +589,13 @@
 
   <header>
     <div class="hrow">
-      <div class="hbrand">
-        <div class="logo" id="appLogo" style="width:38px;height:38px;border-radius:11px"></div>
+            <div class="hbrand">
+        <div class="logo" id="appLogo" style="width:34px;height:34px"></div>
         <div>
-          <h1>BeelzeWork</h1>
-          <span id="dateLine">—</span>
+          <h1>BEELZEWORK</h1>
+          <span>Work to 10 million rands life</span>
         </div>
       </div>
-      <div class="clock" id="clockBox"></div>
     </div>
   </header>
 
@@ -967,8 +972,9 @@ function openApp() {
   document.getElementById('app').classList.remove('hidden');
   view = 'app';
 
-  var logo = 'https://base44.app/api/apps/6a60bc41d1203cb8eb32d4cb/files/mp/public/6a60bc41d1203cb8eb32d4cb/9fb8f4ea9_beelzework-logo.png';
-  document.getElementById('appLogo').innerHTML = '<img src="' + logo + '" alt="BeelzeWork" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block">';
+    var logo = 'https://base44.app/api/apps/6a658880fd290e23c45fefa8/files/mp/public/6a658880fd290e23c45fefa8/3f0373934_beelzework-logo-gold.png';
+    document.getElementById('appLogo').innerHTML = '<img src="' + logo + '" alt="BeelzeWork" style="width:100%;height:100%;object-fit:contain;display:block">';
+
 
   document.getElementById('addBtn').innerHTML = ic('plus', 16) + ' Add activity';
   document.getElementById('endDayBtn').innerHTML = ic('archive', 16) + ' End day';
@@ -1098,10 +1104,8 @@ function actRow(a) {
 }
 
 function renderAll() {
-  document.getElementById('dateLine').textContent =
-    new Date().toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
-
   document.getElementById('dayTag').textContent = 'Day ' + db.day;
+
 
   var list = document.getElementById('list');
   var acts = db.activities;
